@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-feature-settings: "ss01";
+}
+
+.font-display {
+  font-family: var(--font-space-grotesk);
+}
+.font-mono-num {
+  font-family: var(--font-plex-mono);
+}
+
+/* Fragmented shard signature — assembles into an upward arrow on load */
+.shard {
+  opacity: 0;
+  transform: translateY(24px) scale(0.85);
+  animation: shard-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shard {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+@keyframes shard-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card-hover {
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  border-color: rgba(196, 241, 53, 0.4);
+}
+
+:focus-visible {
+  outline: 2px solid #c4f135;
+  outline-offset: 2px;
+}

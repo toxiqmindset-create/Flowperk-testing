@@ -1,11 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignupForm />
+    </Suspense>
+  );
+}
+
+function SignupForm() {
   const router = useRouter();
   const params = useSearchParams();
   const initialRole = params.get("role") === "brand" ? "brand" : "creator";
@@ -38,10 +46,6 @@ export default function SignupPage() {
       return;
     }
 
-    // Go straight to the correct dashboard using the role picked in this form,
-    // instead of re-querying the profile (avoids a race with the DB trigger
-    // that creates the profile row, which was causing both roles to land
-    // on the same dashboard).
     router.push(`/dashboard/${role}`);
     router.refresh();
   }

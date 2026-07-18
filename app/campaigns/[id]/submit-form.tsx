@@ -38,7 +38,13 @@ export default function SubmitClipForm({
     setLoading(false);
 
     if (insertError) {
-      setError(insertError.message);
+      if (insertError.code === "23505") {
+        setError(
+          "This link has already been submitted to a campaign. Each clip can only be submitted once."
+        );
+      } else {
+        setError(insertError.message);
+      }
       return;
     }
 

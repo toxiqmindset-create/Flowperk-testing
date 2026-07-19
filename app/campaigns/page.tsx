@@ -25,8 +25,8 @@ export default async function CampaignsPage() {
         </Link>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 py-10">
-        <h1 className="font-display font-bold text-3xl mb-8">
+      <div className="max-w-6xl mx-auto px-6 py-10 md:px-10 md:py-16">
+        <h1 className="font-display font-bold text-3xl md:text-5xl mb-8">
           Live campaigns
         </h1>
 

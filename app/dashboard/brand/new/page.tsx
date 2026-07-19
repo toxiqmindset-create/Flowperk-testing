@@ -54,8 +54,8 @@ export default function NewCampaignPage() {
   }
 
   return (
-    <div className="max-w-xl">
-      <h1 className="font-display font-bold text-3xl mb-8">
+    <div className="max-w-xl lg:max-w-2xl">
+      <h1 className="font-display font-bold text-3xl md:text-5xl mb-8">
         Launch a campaign
       </h1>
 
@@ -162,14 +162,14 @@ export default function NewCampaignPage() {
       <style>{`
         .input {
           width: 100%;
-          background: #12172A;
+          background: #1B1029;
           border: 1px solid rgba(255,255,255,0.1);
           border-radius: 6px;
           padding: 10px 16px;
-          color: #F5F7FA;
+          color: #F5F0FA;
           outline: none;
         }
-        .input:focus { border-color: rgba(196,241,53,0.5); }
+        .input:focus { border-color: rgba(168,85,247,0.5); }
       `}</style>
     </div>
   );

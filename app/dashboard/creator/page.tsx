@@ -22,7 +22,7 @@ export default async function CreatorDashboard() {
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h1 className="font-display font-bold text-3xl">Your submissions</h1>
+        <h1 className="font-display font-bold text-3xl md:text-5xl">Your submissions</h1>
         <Link
           href="/campaigns"
           className="bg-lime text-base font-display font-semibold text-sm px-4 py-2.5 rounded-md hover:brightness-95 transition"

@@ -51,11 +51,11 @@ export default async function CampaignDetailPage({
         </Link>
       </nav>
 
-      <div className="max-w-3xl mx-auto px-6 py-10">
+      <div className="max-w-3xl lg:max-w-4xl mx-auto px-6 py-10 md:px-10 md:py-16">
         <span className="text-xs uppercase tracking-widest text-violet font-display font-semibold">
           {campaign.campaign_type}
         </span>
-        <h1 className="font-display font-bold text-3xl mt-1">
+        <h1 className="font-display font-bold text-3xl md:text-5xl mt-1">
           {campaign.title}
         </h1>
         <p className="text-muted text-sm mt-1">

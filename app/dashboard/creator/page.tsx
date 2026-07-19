@@ -21,17 +21,17 @@ export default async function CreatorDashboard() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <h1 className="font-display font-bold text-3xl md:text-5xl">Your submissions</h1>
         <Link
           href="/campaigns"
-          className="bg-lime text-base font-display font-semibold text-sm px-4 py-2.5 rounded-md hover:brightness-95 transition"
+          className="bg-lime text-base font-display font-semibold text-sm px-4 py-2.5 rounded-md hover:brightness-95 transition text-center shrink-0"
         >
           Browse campaigns
         </Link>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-3 gap-2 md:gap-4 mb-8">
         <StatCard label="Total earned" value={`$${totalEarnings.toFixed(2)}`} />
         <StatCard
           label="Approved clips"
@@ -95,9 +95,9 @@ export default async function CreatorDashboard() {
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border border-white/10 rounded-lg p-5 bg-surface">
-      <div className="font-mono-num text-2xl text-lime">{value}</div>
-      <div className="text-muted text-sm mt-1">{label}</div>
+    <div className="border border-white/10 rounded-lg p-3 md:p-5 bg-surface overflow-hidden">
+      <div className="font-mono-num text-lg md:text-2xl text-lime truncate">{value}</div>
+      <div className="text-muted text-xs md:text-sm mt-1 truncate">{label}</div>
     </div>
   );
 }

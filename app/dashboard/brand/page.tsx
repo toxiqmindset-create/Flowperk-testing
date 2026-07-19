@@ -22,11 +22,11 @@ export default async function BrandDashboard() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <h1 className="font-display font-bold text-3xl md:text-5xl">Your campaigns</h1>
         <Link
           href="/dashboard/brand/new"
-          className="bg-lime text-base font-display font-semibold text-sm px-4 py-2.5 rounded-md hover:brightness-95 transition"
+          className="bg-lime text-base font-display font-semibold text-sm px-4 py-2.5 rounded-md hover:brightness-95 transition text-center shrink-0"
         >
           + New campaign
         </Link>

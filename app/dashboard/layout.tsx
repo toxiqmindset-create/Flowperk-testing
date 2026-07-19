@@ -26,16 +26,16 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen">
       <nav className="border-b border-white/5">
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-          <Link href="/" className="font-display font-bold text-xl">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 px-4 md:px-6 py-4">
+          <Link href="/" className="font-display font-bold text-xl shrink-0">
             flow<span className="text-lime">perk</span>
           </Link>
-          <div className="flex items-center gap-6 text-sm">
-            <span className="text-muted">
+          <div className="flex items-center gap-3 md:gap-6 text-sm min-w-0">
+            <span className="text-muted hidden sm:inline truncate max-w-[140px] md:max-w-none">
               {profile?.full_name}{" "}
               <span className="text-lime capitalize">({profile?.role})</span>
             </span>
-            <Link href="/campaigns" className="text-muted hover:text-ink transition">
+            <Link href="/campaigns" className="text-muted hover:text-ink transition shrink-0">
               Browse
             </Link>
             <LogoutButton />

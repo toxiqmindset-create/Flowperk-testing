@@ -42,10 +42,10 @@ body {
 }
 .card-hover:hover {
   transform: translateY(-3px);
-  border-color: rgba(196, 241, 53, 0.4);
+  border-color: rgba(168, 85, 247, 0.4);
 }
 
 :focus-visible {
-  outline: 2px solid #c4f135;
+  outline: 2px solid #a855f7;
   outline-offset: 2px;
 }

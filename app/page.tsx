@@ -27,16 +27,31 @@ const stagger = {
 export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden relative">
-      {/* Ambient glow blobs, slow drifting motion in the background */}
+      {/* Floating purple/pink bubbles drifting in the background */}
       <motion.div
-        className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-lime/10 blur-3xl"
+        className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-lime/20 blur-3xl"
         animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
         transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="pointer-events-none absolute top-1/3 -right-40 w-96 h-96 rounded-full bg-violet/10 blur-3xl"
+        className="pointer-events-none absolute top-1/3 -right-40 w-96 h-96 rounded-full bg-violet/20 blur-3xl"
         animate={{ x: [0, -30, 0], y: [0, 40, 0] }}
         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="pointer-events-none absolute top-1/2 left-1/4 w-64 h-64 rounded-full bg-lime/10 blur-2xl"
+        animate={{ x: [0, 25, 0], y: [0, -35, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="pointer-events-none absolute bottom-0 right-1/4 w-72 h-72 rounded-full bg-violet/15 blur-2xl"
+        animate={{ x: [0, -20, 0], y: [0, -25, 0], scale: [1, 1.08, 1] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="pointer-events-none absolute top-10 right-1/3 w-40 h-40 rounded-full bg-lime/15 blur-xl"
+        animate={{ y: [0, 20, 0], scale: [1, 1.15, 1] }}
+        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* NAV */}
@@ -135,7 +150,7 @@ export default function Home() {
               style={{
                 height: `${s.h}px`,
                 background:
-                  i % 3 === 0 ? "#C4F135" : i % 3 === 1 ? "#7B61FF" : "#1A2036",
+                  i % 3 === 0 ? "#A855F7" : i % 3 === 1 ? "#F472B6" : "#251640",
                 border: "1px solid rgba(255,255,255,0.06)",
               }}
             />
@@ -249,7 +264,7 @@ function Step({ n, title, body }: { n: string; title: string; body: string }) {
   return (
     <motion.div
       variants={fadeUp}
-      whileHover={{ y: -4, borderColor: "rgba(196,241,53,0.4)" }}
+      whileHover={{ y: -4, borderColor: "rgba(168,85,247,0.4)" }}
       className="border border-white/10 rounded-lg p-6 bg-surface transition-colors"
     >
       <div className="font-mono-num text-violet text-sm mb-4">{n}</div>
@@ -275,7 +290,7 @@ function RoleCard({
   return (
     <motion.div
       variants={fadeUp}
-      whileHover={{ y: -4, borderColor: "rgba(196,241,53,0.4)" }}
+      whileHover={{ y: -4, borderColor: "rgba(168,85,247,0.4)" }}
       className="border border-white/10 rounded-lg p-8 bg-surface flex flex-col transition-colors"
     >
       <span className="text-lime text-xs uppercase tracking-widest font-display font-semibold">

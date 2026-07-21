@@ -35,6 +35,11 @@ export default async function DashboardLayout({
               {profile?.full_name}{" "}
               <span className="text-lime capitalize">({profile?.role})</span>
             </span>
+            {profile?.role === "creator" && (
+              <Link href="/dashboard/creator/wallet" className="text-muted hover:text-ink transition shrink-0">
+                Wallet
+              </Link>
+            )}
             <Link href="/campaigns" className="text-muted hover:text-ink transition shrink-0">
               Browse
             </Link>

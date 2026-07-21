@@ -23,12 +23,20 @@ export default async function CreatorDashboard() {
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <h1 className="font-display font-bold text-3xl md:text-5xl">Your submissions</h1>
-        <Link
-          href="/campaigns"
-          className="bg-lime text-base font-display font-semibold text-sm px-4 py-2.5 rounded-md hover:brightness-95 transition text-center shrink-0"
-        >
-          Browse campaigns
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            href="/dashboard/creator/wallet"
+            className="border border-lime/40 text-lime font-display font-semibold text-sm px-4 py-2.5 rounded-md hover:bg-lime/10 transition text-center shrink-0"
+          >
+            Wallet
+          </Link>
+          <Link
+            href="/campaigns"
+            className="bg-lime text-base font-display font-semibold text-sm px-4 py-2.5 rounded-md hover:brightness-95 transition text-center shrink-0"
+          >
+            Browse campaigns
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-2 md:gap-4 mb-8">

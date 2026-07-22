@@ -6,13 +6,40 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 
+const COUNTRIES = [
+  "United States",
+  "United Kingdom",
+  "Canada",
+  "Australia",
+  "India",
+  "Germany",
+  "France",
+  "Netherlands",
+  "Brazil",
+  "Mexico",
+  "Philippines",
+  "Indonesia",
+  "Nigeria",
+  "South Africa",
+  "Pakistan",
+  "Bangladesh",
+  "United Arab Emirates",
+  "Singapore",
+  "Other",
+];
+
 const stagger = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.08 } },
 };
 const item = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 24, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { type: "spring", stiffness: 260, damping: 20 },
+  },
 };
 
 export default function SignupPage() {
@@ -30,6 +57,7 @@ function SignupForm() {
 
   const [role, setRole] = useState<"brand" | "creator">(initialRole);
   const [fullName, setFullName] = useState("");
+  const [country, setCountry] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +73,7 @@ function SignupForm() {
       email,
       password,
       options: {
-        data: { full_name: fullName, role },
+        data: { full_name: fullName, role, country },
       },
     });
 
@@ -129,6 +157,26 @@ function SignupForm() {
           className="space-y-4 border border-white/10 rounded-2xl p-6 bg-surface/60 backdrop-blur"
         >
           <Input label="Full name" value={fullName} onChange={setFullName} required />
+
+          <label className="block">
+            <span className="text-sm text-muted mb-1.5 block">Country</span>
+            <select
+              required
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              className="w-full bg-surface border border-white/10 rounded-md px-4 py-2.5 text-ink focus:border-lime/50 outline-none transition"
+            >
+              <option value="" disabled>
+                Select your country
+              </option>
+              {COUNTRIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </label>
+
           <Input
             label="Email"
             type="email"

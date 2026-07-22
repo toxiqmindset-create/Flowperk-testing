@@ -1,7 +1,13 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 
 const shards = [
   { h: 40, delay: 0 },
@@ -25,8 +31,32 @@ const stagger = {
 };
 
 export default function Home() {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  }
+
+  const spotlightBg = useTransform(
+    [mouseX, mouseY],
+    ([x, y]) =>
+      `radial-gradient(600px circle at ${x}px ${y}px, rgba(168,85,247,0.15), transparent 70%)`
+  );
+
   return (
-    <main className="min-h-screen overflow-hidden relative">
+    <main
+      onMouseMove={handleMouseMove}
+      className="min-h-screen overflow-hidden relative"
+    >
+      {/* Mouse-follow spotlight */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ background: spotlightBg }}
+      />
+
       {/* Floating purple/pink bubbles drifting in the background */}
       <motion.div
         className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-lime/20 blur-3xl"
@@ -72,30 +102,21 @@ export default function Home() {
             Log in
           </Link>
         </div>
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-          <Link
-            href="/signup"
-            className="bg-lime text-base font-display font-semibold text-sm px-4 py-2 rounded-md inline-block hover:brightness-95 transition"
-          >
-            Get started
-          </Link>
-        </motion.div>
+        <MagneticButton href="/signup" primary small>
+          Get started
+        </MagneticButton>
       </motion.nav>
 
       {/* HERO */}
       <section className="max-w-6xl mx-auto px-6 pt-16 pb-24 grid md:grid-cols-2 gap-12 items-center relative z-10">
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={stagger}
-        >
+        <motion.div initial="hidden" animate="show" variants={stagger}>
           <motion.h1
             variants={fadeUp}
             className="font-display font-bold text-5xl md:text-6xl leading-[1.05] tracking-tight"
           >
             Every clip
             <br />
-            adds up to <span className="text-lime">income.</span>
+            adds up to <ShimmerText>income.</ShimmerText>
           </motion.h1>
           <motion.p
             variants={fadeUp}
@@ -106,22 +127,12 @@ export default function Home() {
             client hunting.
           </motion.p>
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-4">
-            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-              <Link
-                href="/signup?role=creator"
-                className="bg-lime text-base font-display font-semibold px-6 py-3 rounded-md inline-block hover:brightness-95 transition"
-              >
-                Start clipping
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-              <Link
-                href="/signup?role=brand"
-                className="border border-white/15 font-display font-semibold px-6 py-3 rounded-md inline-block hover:border-lime/50 transition"
-              >
-                Launch a campaign
-              </Link>
-            </motion.div>
+            <MagneticButton href="/signup?role=creator" primary>
+              Start clipping
+            </MagneticButton>
+            <MagneticButton href="/signup?role=brand">
+              Launch a campaign
+            </MagneticButton>
           </motion.div>
         </motion.div>
 
@@ -191,21 +202,9 @@ export default function Home() {
           variants={stagger}
           className="grid md:grid-cols-3 gap-8"
         >
-          <Step
-            n="01"
-            title="Find a campaign"
-            body="Browse live campaigns with real budgets. Pick one that fits, join instantly."
-          />
-          <Step
-            n="02"
-            title="Post your clip"
-            body="Clip the content, post it to TikTok, Reels, or Shorts, drop the link back in."
-          />
-          <Step
-            n="03"
-            title="Get paid"
-            body="Once views clear the campaign minimum, payout is calculated automatically."
-          />
+          <TiltCard n="01" title="Find a campaign" body="Browse live campaigns with real budgets. Pick one that fits, join instantly." />
+          <TiltCard n="02" title="Post your clip" body="Clip the content, post it to TikTok, Reels, or Shorts, drop the link back in." />
+          <TiltCard n="03" title="Get paid" body="Once views clear the campaign minimum, payout is calculated automatically." />
         </motion.div>
       </section>
 
@@ -251,25 +250,119 @@ export default function Home() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+/* Shimmering animated gradient text */
+function ShimmerText({ children }: { children: React.ReactNode }) {
   return (
-    <motion.div variants={fadeUp}>
-      <div className="font-mono-num text-2xl text-lime">{value}</div>
-      <div className="text-muted text-sm mt-1">{label}</div>
+    <motion.span
+      className="bg-clip-text text-transparent inline-block"
+      style={{
+        backgroundImage:
+          "linear-gradient(90deg, #A855F7, #F472B6, #A855F7, #F472B6)",
+        backgroundSize: "300% 100%",
+      }}
+      animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+      transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+    >
+      {children}
+    </motion.span>
+  );
+}
+
+/* Button that subtly follows the cursor within its bounds (magnetic effect) */
+function MagneticButton({
+  href,
+  children,
+  primary,
+  small,
+}: {
+  href: string;
+  children: React.ReactNode;
+  primary?: boolean;
+  small?: boolean;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 200, damping: 15 });
+  const springY = useSpring(y, { stiffness: 200, damping: 15 });
+
+  function handleMove(e: React.MouseEvent<HTMLAnchorElement>) {
+    const rect = ref.current!.getBoundingClientRect();
+    const relX = e.clientX - rect.left - rect.width / 2;
+    const relY = e.clientY - rect.top - rect.height / 2;
+    x.set(relX * 0.3);
+    y.set(relY * 0.3);
+  }
+  function handleLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <motion.div style={{ x: springX, y: springY }} className="inline-block">
+      <Link
+        ref={ref}
+        href={href}
+        onMouseMove={handleMove}
+        onMouseLeave={handleLeave}
+        className={`font-display font-semibold rounded-md inline-block transition ${
+          primary
+            ? "bg-lime text-base hover:brightness-95"
+            : "border border-white/15 hover:border-lime/50"
+        } ${small ? "text-sm px-4 py-2" : "px-6 py-3"}`}
+      >
+        {children}
+      </Link>
     </motion.div>
   );
 }
 
-function Step({ n, title, body }: { n: string; title: string; body: string }) {
+/* Card with real 3D tilt that follows the mouse */
+function TiltCard({ n, title, body }: { n: string; title: string; body: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const springRX = useSpring(rotateX, { stiffness: 150, damping: 15 });
+  const springRY = useSpring(rotateY, { stiffness: 150, damping: 15 });
+
+  function handleMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = ref.current!.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    rotateY.set(px * 14);
+    rotateX.set(-py * 14);
+  }
+  function handleLeave() {
+    rotateX.set(0);
+    rotateY.set(0);
+  }
+
   return (
     <motion.div
       variants={fadeUp}
-      whileHover={{ y: -4, borderColor: "rgba(168,85,247,0.4)" }}
+      ref={ref}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      style={{
+        rotateX: springRX,
+        rotateY: springRY,
+        transformPerspective: 800,
+      }}
+      whileHover={{ borderColor: "rgba(168,85,247,0.5)", scale: 1.02 }}
       className="border border-white/10 rounded-lg p-6 bg-surface transition-colors"
     >
       <div className="font-mono-num text-violet text-sm mb-4">{n}</div>
       <h3 className="font-display font-semibold text-xl mb-2">{title}</h3>
       <p className="text-muted text-sm leading-relaxed">{body}</p>
+    </motion.div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <motion.div variants={fadeUp}>
+      <div className="font-mono-num text-2xl text-lime">{value}</div>
+      <div className="text-muted text-sm mt-1">{label}</div>
     </motion.div>
   );
 }
@@ -287,10 +380,36 @@ function RoleCard({
   cta: string;
   href: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const springRX = useSpring(rotateX, { stiffness: 150, damping: 15 });
+  const springRY = useSpring(rotateY, { stiffness: 150, damping: 15 });
+
+  function handleMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = ref.current!.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    rotateY.set(px * 8);
+    rotateX.set(-py * 8);
+  }
+  function handleLeave() {
+    rotateX.set(0);
+    rotateY.set(0);
+  }
+
   return (
     <motion.div
       variants={fadeUp}
-      whileHover={{ y: -4, borderColor: "rgba(168,85,247,0.4)" }}
+      ref={ref}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      style={{
+        rotateX: springRX,
+        rotateY: springRY,
+        transformPerspective: 1000,
+      }}
+      whileHover={{ borderColor: "rgba(168,85,247,0.5)" }}
       className="border border-white/10 rounded-lg p-8 bg-surface flex flex-col transition-colors"
     >
       <span className="text-lime text-xs uppercase tracking-widest font-display font-semibold">
